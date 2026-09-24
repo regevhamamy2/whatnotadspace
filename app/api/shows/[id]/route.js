@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { isAuthed } from '../../../lib/auth';
-import { sb } from '../../../lib/supabase-rest';
+import { isAuthed } from '../../../../lib/auth';
+import { sb } from '../../../../lib/supabase-rest';
 
 export async function GET() {
   if (!isAuthed()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
