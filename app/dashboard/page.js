@@ -9,6 +9,7 @@ export default function Dashboard() {
   const [shows, setShows] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState('');
 
   async function load() {
     const r = await fetch('/api/shows');
@@ -40,6 +41,19 @@ export default function Dashboard() {
 
   function patchShow(id, patch) { setShows(s => s.map(x => x.id===id ? {...x,...patch} : x)); }
   function patchSlot(showId, slotId, patch) { setShows(s => s.map(x => x.id!==showId ? x : {...x,sponsor_slots:x.sponsor_slots.map(sl=>sl.id===slotId?{...sl,...patch}:sl)})); }
+
+  async function uploadLogo(showId, slotId, file) {
+    if (!file) return;
+    const key = `${showId}:${slotId}`;
+    setUploading(key);
+    const fd = new FormData();
+    fd.append('file', file);
+    const r = await fetch('/api/upload-logo', { method:'POST', body:fd });
+    const data = await r.json().catch(()=>({}));
+    if (!r.ok) alert(data.error || 'Logo upload failed');
+    else patchSlot(showId, slotId, { logo_url:data.url });
+    setUploading('');
+  }
 
   if (authed === null) return <main className="center"><div className="card">Loading…</div></main>;
   if (!authed) return <main className="center"><form className="card" onSubmit={login}><h1>Admin Login</h1><input type="password" placeholder="Dashboard password" value={password} onChange={e=>setPassword(e.target.value)} /><button>Log in</button></form></main>;
@@ -76,7 +90,11 @@ export default function Dashboard() {
             <div className="slotNum">{slot.position}</div>
             <input placeholder="Sponsor brand" value={slot.brand||''} onChange={e=>patchSlot(show.id,slot.id,{brand:e.target.value})}/>
             <input placeholder="Message" value={slot.message||''} onChange={e=>patchSlot(show.id,slot.id,{message:e.target.value})}/>
-            <input placeholder="Logo URL (optional)" value={slot.logo_url||''} onChange={e=>patchSlot(show.id,slot.id,{logo_url:e.target.value})}/>
+            <div className="logoUpload">
+              {slot.logo_url ? <img className="logoThumb" src={slot.logo_url} alt="Sponsor logo" /> : <span className="noLogo">No logo</span>}
+              <label className="uploadButton">{uploading===`${show.id}:${slot.id}` ? 'Uploading…' : 'Upload logo'}<input className="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" disabled={!!uploading} onChange={e=>uploadLogo(show.id,slot.id,e.target.files?.[0])}/></label>
+              {slot.logo_url && <button type="button" className="removeLogo" onClick={()=>patchSlot(show.id,slot.id,{logo_url:null})}>Remove</button>}
+            </div>
             <label><input type="checkbox" checked={!!slot.active} onChange={e=>patchSlot(show.id,slot.id,{active:e.target.checked})}/> Active</label>
             <label><input type="checkbox" checked={!!slot.paid} onChange={e=>patchSlot(show.id,slot.id,{paid:e.target.checked})}/> Paid</label>
           </div>)}
