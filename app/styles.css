@@ -216,43 +216,87 @@ body,
   color: white;
 }
 
-/* DISCOUNT KICKS - LIVE STREAM POSITION ADJUSTMENTS */
+
+/* DISCOUNT KICKS - POSITION AND TEXT FIT FIX */
 
 .dkBanner {
-  /* Lower banner to clear Whatnot top interface */
-  top: 100px !important;
+  /* Lower banner another 100px */
+  top: 200px !important;
 
-  /* Add safe space on both sides */
-  left: 30px !important;
-  width: calc(100% - 60px) !important;
+  /* Keep a narrow margin on both sides */
+  left: 20px !important;
+  right: 20px !important;
+  width: calc(100% - 40px) !important;
 
-  /* Keep approved banner height */
+  /* Preserve banner height */
   height: 250px !important;
 
-  /* Add extra room for text inside */
-  padding-left: 18px !important;
-  padding-right: 18px !important;
+  /* Give content more usable space */
+  padding: 15px 12px !important;
+
+  /* Rebalance the three sections */
+  grid-template-columns: 22% 45% 33% !important;
+  column-gap: 0 !important;
 }
 
-/* Prevent sponsor text from overflowing */
-.dkLeft,
-.dkCenter,
-.dkRight {
-  min-width: 0;
-}
-
+/* Left sponsor heading */
 .dkLeft {
-  font-size: clamp(17px, 2.7vw, 31px);
+  min-width: 0;
+  font-size: 25px !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.5px !important;
 }
 
 .dkGold {
-  font-size: clamp(15px, 2.2vw, 25px);
+  font-size: 20px !important;
+}
+
+/* Center logo and brand */
+.dkCenter {
+  min-width: 0;
+  gap: 10px !important;
+  padding: 0 8px !important;
+}
+
+.dkLogoCircle {
+  width: 115px !important;
+  height: 115px !important;
+}
+
+.dkBrandInfo {
+  min-width: 0;
 }
 
 .dkBrand {
-  font-size: clamp(20px, 3.4vw, 39px);
+  font-size: 30px !important;
+  line-height: 1.05 !important;
+  letter-spacing: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dkTagline {
+  font-size: 11px !important;
+  letter-spacing: 0 !important;
+}
+
+/* Right sponsor message */
+.dkRight {
+  min-width: 0;
+  padding-left: 10px !important;
+  gap: 6px !important;
+}
+
+.dkShopLabel {
+  font-size: 16px !important;
 }
 
 .dkMessageBox {
-  font-size: clamp(14px, 2vw, 23px);
+  font-size: 17px !important;
+  padding: 9px 6px !important;
+  line-height: 1.15 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dkFooter {
+  font-size: 13px !important;
 }
