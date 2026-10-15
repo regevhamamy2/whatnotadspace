@@ -215,3 +215,44 @@ body,
   font-weight: 900;
   color: white;
 }
+
+/* DISCOUNT KICKS - LIVE STREAM POSITION ADJUSTMENTS */
+
+.dkBanner {
+  /* Lower banner to clear Whatnot top interface */
+  top: 100px !important;
+
+  /* Add safe space on both sides */
+  left: 30px !important;
+  width: calc(100% - 60px) !important;
+
+  /* Keep approved banner height */
+  height: 250px !important;
+
+  /* Add extra room for text inside */
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+/* Prevent sponsor text from overflowing */
+.dkLeft,
+.dkCenter,
+.dkRight {
+  min-width: 0;
+}
+
+.dkLeft {
+  font-size: clamp(17px, 2.7vw, 31px);
+}
+
+.dkGold {
+  font-size: clamp(15px, 2.2vw, 25px);
+}
+
+.dkBrand {
+  font-size: clamp(20px, 3.4vw, 39px);
+}
+
+.dkMessageBox {
+  font-size: clamp(14px, 2vw, 23px);
+}
