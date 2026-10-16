@@ -17,8 +17,6 @@ export default function Overlay() {
   const preview = params.get('preview') === 'red1';
 
   useEffect(() => {
-    if (preview) return;
-
     let cancelled = false;
 
     async function refresh() {
@@ -27,7 +25,9 @@ export default function Overlay() {
           `/api/overlay/current?channel=${encodeURIComponent(channel)}`,
           { cache: 'no-store' }
         );
+
         if (!response.ok) return;
+
         const result = await response.json();
         if (!cancelled) setData(result);
       } catch (error) {
@@ -42,12 +42,11 @@ export default function Overlay() {
       cancelled = true;
       clearInterval(poll);
     };
-  }, [channel, preview]);
+  }, [channel]);
 
   useEffect(() => {
-    if (preview) return;
-
     clearInterval(timer.current);
+
     const seconds = Math.max(
       1,
       Number(data?.show?.rotation_seconds) || 20
@@ -58,44 +57,7 @@ export default function Overlay() {
     }, seconds * 1000);
 
     return () => clearInterval(timer.current);
-  }, [data?.show?.rotation_seconds, preview]);
-
-  if (preview) {
-    return (
-      <div className="redOverlay">
-        <div className="redBanner">
-          <div className="redSponsorLabel">
-            <span>SPONSORED BY</span>
-          </div>
-
-          <div className="redIdentity">
-            <div className="redLogo">
-              <span className="redCrown">♛</span>
-              <span>DK</span>
-            </div>
-
-            <div className="redBrandBlock">
-              <div className="redBrandName">
-                <span>DISCOUNT</span>
-                <strong>KICKS</strong>
-              </div>
-              <div className="redTagline">
-                SNEAKERS • STREETWEAR • MORE
-              </div>
-            </div>
-          </div>
-
-          <div className="redCTA">
-            <div className="redCart">🛒</div>
-            <div className="redCTAText">
-              <span>SHOP AT</span>
-              <strong>DISCOUNTKICKS.COM</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  }, [data?.show?.rotation_seconds]);
 
   if (!data?.active || !data.show) return null;
 
@@ -115,7 +77,7 @@ export default function Overlay() {
 
     const house = {
       brand: 'YOUR BRAND HERE',
-      message: `${Number(show.reach_low || 12000).toLocaleString()}–${Number(show.reach_high || 15000).toLocaleString()} SHOW REACH • $${show.slot_price || 250} PER SLOT • ${Math.max(0, 10 - paid.length)} SPOTS LEFT`,
+      message: `ADVERTISE WITH US • $${show.slot_price || 250} PER SLOT`,
       house: true
     };
 
@@ -124,8 +86,49 @@ export default function Overlay() {
   }
 
   const brand = item.brand || 'YOUR BRAND HERE';
-  const message = item.message || 'VISIT OUR SPONSOR';
+  const message = item.message || 'CHECK OUT OUR SPONSOR';
   const isHouse = Boolean(item.house);
+
+  if (preview) {
+    const words = brand.trim().split(/\s+/);
+    const lastWord = words.pop() || '';
+    const firstWords = words.join(' ');
+
+    return (
+      <div className="redOverlay">
+        <div className="redBanner">
+          <div className="redSponsorLabel">
+            <span>SPONSORED BY</span>
+          </div>
+
+          <div className="redIdentity">
+            <div className="redLogo">
+              {item.logo_url ? (
+                <img src={item.logo_url} alt="" />
+              ) : (
+                <span className="redLogoFallback">
+                  {isHouse ? '★' : brand.slice(0, 2).toUpperCase()}
+                </span>
+              )}
+            </div>
+
+            <div className="redBrandBlock">
+              <div className="redBrandName">
+                {firstWords && <span>{firstWords}</span>}
+                <strong>{lastWord}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div className="redCTA">
+            <div className="redCTAText">
+              {message}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dkOverlay">
