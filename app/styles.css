@@ -300,3 +300,151 @@ body,
 .dkFooter {
   font-size: 13px !important;
 }
+
+/* WHITE AND RED SPONSOR BANNER - TEST VERSION */
+
+.redOverlay {
+  position: fixed;
+  inset: 0;
+  background: transparent !important;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.redBanner {
+  position: absolute;
+  top: 200px;
+  left: 20px;
+  width: calc(100% - 40px);
+  height: 180px;
+  display: grid;
+  grid-template-columns: 17% 48% 35%;
+  align-items: center;
+  overflow: hidden;
+  border: 2px solid #dedede;
+  border-radius: 14px;
+  background:
+    linear-gradient(130deg, #ffffff, #f0f0f0 55%, #ffffff);
+  box-shadow: 0 6px 22px rgba(0,0,0,.35);
+  color: #111;
+}
+
+.redSponsorLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  min-width: 0;
+  height: 100%;
+  background:
+    linear-gradient(135deg, #e50914 0 12%, transparent 12%),
+    linear-gradient(315deg, #dcdcdc 0 12%, transparent 12%);
+}
+
+.redSponsorLabel span {
+  font-size: 19px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.1;
+  text-align: center;
+  color: #171717;
+  border-bottom: 4px solid #e50914;
+  padding-bottom: 7px;
+}
+
+.redIdentity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  gap: 12px;
+  padding: 0 10px;
+}
+
+.redLogo {
+  width: 112px;
+  height: 112px;
+  border: 5px solid #e50914;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+  font-size: 49px;
+  font-weight: 950;
+  letter-spacing: -5px;
+}
+
+.redCrown {
+  position: absolute;
+  top: -14px;
+  font-size: 31px;
+  letter-spacing: 0;
+}
+
+.redBrandBlock {
+  min-width: 0;
+}
+
+.redBrandName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  font-size: 39px;
+  font-weight: 950;
+  line-height: 1.03;
+  letter-spacing: -1px;
+}
+
+.redBrandName strong {
+  color: #df0612;
+  font-weight: 950;
+}
+
+.redTagline {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.redCTA {
+  height: 80%;
+  margin-right: 10px;
+  border-radius: 20px;
+  border: 3px solid #ff313b;
+  background: linear-gradient(120deg, #f00b19, #a90009);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px;
+  min-width: 0;
+}
+
+.redCart {
+  font-size: 38px;
+  flex-shrink: 0;
+}
+
+.redCTAText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.redCTAText span {
+  font-size: 21px;
+}
+
+.redCTAText strong {
+  font-size: 23px;
+  overflow-wrap: anywhere;
+}
