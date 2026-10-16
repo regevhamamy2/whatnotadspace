@@ -570,3 +570,49 @@ body,
   overflow-wrap: anywhere;
 }
 
+/* WHITE & RED BANNER - SPACING AND POSITION FIX */
+
+.redBannerV2 {
+  top: 200px !important;
+  left: 30px !important;
+  width: calc(100% - 60px) !important;
+
+  /* Give sponsor name and message more room */
+  grid-template-columns: 18% 15% 67% !important;
+  padding: 12px 20px !important;
+}
+
+.redBannerV2 .redSponsorLabel {
+  min-width: 0 !important;
+  padding: 4px !important;
+}
+
+.redBannerV2 .redSponsorLabel span {
+  font-size: 16px !important;
+  white-space: normal !important;
+  text-align: center !important;
+  line-height: 1.15 !important;
+}
+
+.redBannerV2 .redLogo {
+  width: 100px !important;
+  height: 100px !important;
+}
+
+.redSponsorContent {
+  padding-left: 15px !important;
+  padding-right: 8px !important;
+  gap: 6px !important;
+}
+
+.redBannerV2 .redBrandName {
+  font-size: 38px !important;
+  line-height: 1.05 !important;
+}
+
+.redSponsorMessage {
+  font-size: 18px !important;
+  padding: 8px 12px !important;
+  line-height: 1.15 !important;
+}
+
