@@ -8,13 +8,17 @@ export default function Overlay() {
   const [idx, setIdx] = useState(0);
   const timer = useRef(null);
 
-  const channel =
+  const params =
     typeof window !== 'undefined'
-      ? new URLSearchParams(window.location.search).get('channel') ||
-        'discount-kicks'
-      : 'discount-kicks';
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams();
+
+  const channel = params.get('channel') || 'discount-kicks';
+  const preview = params.get('preview') === 'red1';
 
   useEffect(() => {
+    if (preview) return;
+
     let cancelled = false;
 
     async function refresh() {
@@ -38,9 +42,11 @@ export default function Overlay() {
       cancelled = true;
       clearInterval(poll);
     };
-  }, [channel]);
+  }, [channel, preview]);
 
   useEffect(() => {
+    if (preview) return;
+
     clearInterval(timer.current);
     const seconds = Math.max(
       1,
@@ -52,7 +58,44 @@ export default function Overlay() {
     }, seconds * 1000);
 
     return () => clearInterval(timer.current);
-  }, [data?.show?.rotation_seconds]);
+  }, [data?.show?.rotation_seconds, preview]);
+
+  if (preview) {
+    return (
+      <div className="redOverlay">
+        <div className="redBanner">
+          <div className="redSponsorLabel">
+            <span>SPONSORED BY</span>
+          </div>
+
+          <div className="redIdentity">
+            <div className="redLogo">
+              <span className="redCrown">♛</span>
+              <span>DK</span>
+            </div>
+
+            <div className="redBrandBlock">
+              <div className="redBrandName">
+                <span>DISCOUNT</span>
+                <strong>KICKS</strong>
+              </div>
+              <div className="redTagline">
+                SNEAKERS • STREETWEAR • MORE
+              </div>
+            </div>
+          </div>
+
+          <div className="redCTA">
+            <div className="redCart">🛒</div>
+            <div className="redCTAText">
+              <span>SHOP AT</span>
+              <strong>DISCOUNTKICKS.COM</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!data?.active || !data.show) return null;
 
