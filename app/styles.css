@@ -489,3 +489,84 @@ body,
   padding: 12px 15px;
   overflow: hidden;
 }
+
+/* DISCOUNT KICKS - WHITE & RED BANNER V2 */
+
+.redBannerV2 {
+  top: 200px !important;
+  left: 20px !important;
+  width: calc(100% - 40px) !important;
+  height: 175px !important;
+  padding: 12px 18px !important;
+
+  display: grid !important;
+  grid-template-columns: 22% 15% 63% !important;
+  align-items: center !important;
+  gap: 0 !important;
+
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #f2f2f2 60%,
+    #ffffff 100%
+  ) !important;
+
+  border: 2px solid #e2e2e2 !important;
+  border-radius: 15px !important;
+  overflow: hidden !important;
+}
+
+.redBannerV2 .redSponsorLabel {
+  padding: 8px !important;
+  background: transparent !important;
+}
+
+.redBannerV2 .redSponsorLabel span {
+  font-size: 20px !important;
+  color: #111 !important;
+  border-bottom: 4px solid #e50914 !important;
+  white-space: nowrap;
+}
+
+.redBannerV2 .redLogo {
+  width: 118px !important;
+  height: 118px !important;
+  margin: auto !important;
+  border: 5px solid #e50914 !important;
+}
+
+.redSponsorContent {
+  min-width: 0;
+  padding: 0 15px 0 22px;
+  border-left: 3px solid #222;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.redBannerV2 .redBrandName {
+  font-size: 44px !important;
+  line-height: 1.05 !important;
+  font-weight: 950;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.redBannerV2 .redBrandName strong {
+  color: #e50914 !important;
+}
+
+.redSponsorMessage {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #ed101d, #ba000b);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
