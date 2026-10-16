@@ -89,48 +89,45 @@ export default function Overlay() {
   const message = item.message || 'CHECK OUT OUR SPONSOR';
   const isHouse = Boolean(item.house);
 
-  if (preview) {
-    const words = brand.trim().split(/\s+/);
-    const lastWord = words.pop() || '';
-    const firstWords = words.join(' ');
+  
+if (preview) {
+  const words = brand.trim().split(/\s+/);
+  const lastWord = words.pop() || '';
+  const firstWords = words.join(' ');
 
-    return (
-      <div className="redOverlay">
-        <div className="redBanner">
-          <div className="redSponsorLabel">
-            <span>SPONSORED BY</span>
+  return (
+    <div className="redOverlay">
+      <div className="redBanner redBannerV2">
+        <div className="redSponsorLabel">
+          <span>SPONSORED BY</span>
+        </div>
+
+        <div className="redLogo">
+          {item.logo_url ? (
+            <img src={item.logo_url} alt="" />
+          ) : (
+            <span className="redLogoFallback">
+              {isHouse ? '★' : brand.slice(0, 2).toUpperCase()}
+            </span>
+          )}
+        </div>
+
+        <div className="redSponsorContent">
+          <div className="redBrandName">
+            {firstWords && <span>{firstWords}</span>}
+            <strong>{lastWord}</strong>
           </div>
 
-          <div className="redIdentity">
-            <div className="redLogo">
-              {item.logo_url ? (
-                <img src={item.logo_url} alt="" />
-              ) : (
-                <span className="redLogoFallback">
-                  {isHouse ? '★' : brand.slice(0, 2).toUpperCase()}
-                </span>
-              )}
-            </div>
-
-            <div className="redBrandBlock">
-              <div className="redBrandName">
-                {firstWords && <span>{firstWords}</span>}
-                <strong>{lastWord}</strong>
-              </div>
-            </div>
-          </div>
-
-          <div className="redCTA">
-            <div className="redCTAText">
-              {message}
-            </div>
+          <div className="redSponsorMessage">
+            {message}
           </div>
         </div>
       </div>
-    );
-  }
-
-  return (
+    </div>
+  );
+}
+  
+return (
     <div className="dkOverlay">
       <div className="dkBanner">
         <div className="dkLeft">
