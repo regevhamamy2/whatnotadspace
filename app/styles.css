@@ -1,57 +1,37 @@
+/* Dashboard styles preserved from original file. */
 *{box-sizing:border-box}html,body{margin:0;font-family:Inter,Arial,sans-serif;background:#0a0a0a;color:#f6f6f6}a{color:#d9b75f}.center{min-height:100vh;display:grid;place-items:center;padding:24px}.dash{max-width:1200px;margin:0 auto;padding:24px}header{display:flex;justify-content:space-between;gap:24px;align-items:center;margin-bottom:20px}.card{background:#151515;border:1px solid #2e2e2e;border-radius:18px;padding:22px;box-shadow:0 12px 40px rgba(0,0,0,.25);margin-bottom:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.inline{display:flex;flex-wrap:wrap;gap:14px;align-items:end;margin:16px 0}.showTop{display:flex;justify-content:space-between;gap:20px}.metrics{display:flex;flex-direction:column;text-align:right;color:#d9b75f}label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#cfcfcf}input{background:#0d0d0d;color:white;border:1px solid #3a3a3a;border-radius:10px;padding:10px 12px}input[type=checkbox]{width:auto}.slots{display:grid;gap:10px;margin:18px 0}.slot{display:grid;grid-template-columns:44px 1fr 1.2fr 1.2fr auto auto;gap:10px;align-items:center}.slotNum{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#d9b75f;color:#111;font-weight:800}button{background:#d9b75f;color:#111;border:0;border-radius:10px;padding:11px 16px;font-weight:800;cursor:pointer}.ghost{background:transparent;color:#ddd;border:1px solid #444}.overlayWrap{position:fixed;inset:0;background:transparent;pointer-events:none}.sponsorBar{position:absolute;left:26px;right:26px;top:26px;min-height:132px;border-radius:22px;padding:18px 22px;background:linear-gradient(180deg,#1a1a1a,#090909);border:2px solid #d9b75f;box-shadow:0 8px 35px rgba(0,0,0,.55);display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr;color:white}.eyebrow{font-size:18px;letter-spacing:2px;color:#e5c86f;font-weight:800}.brandBlock{display:flex;gap:16px;align-items:center}.brandBlock img{height:56px;max-width:180px;object-fit:contain;background:white;border-radius:8px;padding:5px}.brand{font-size:34px;font-weight:900;line-height:1.05}.message{font-size:17px;margin-top:5px;color:#efefef}.rightBadge{grid-column:2;grid-row:1/3;align-self:center;padding:12px 16px;border-radius:999px;border:1px solid #d9b75f;color:#e5c86f;font-weight:900;letter-spacing:1px}@media(max-width:800px){.slot{grid-template-columns:40px 1fr}.slot>*:nth-child(n+3){grid-column:2}.showTop{flex-direction:column}.metrics{text-align:left}}
 
-/* Transparent OBS overlay background */
-html,
-body {
+/* ==========================================================
+   DISCOUNT KICKS - CLEAN SPONSOR OVERLAY STYLES
+   Designed for a 1080 x 1920 OBS Browser Source.
+   ========================================================== */
+
+/* Keep the OBS canvas transparent, without changing the dashboard. */
+html:has(.redOverlay),
+body:has(.redOverlay),
+html:has(.dkOverlay),
+body:has(.dkOverlay),
+html:has(.overlayWrap),
+body:has(.overlayWrap) {
   background: transparent !important;
   background-color: transparent !important;
 }
 
+/* Legacy overlay support (does not affect the red preview). */
 .overlayWrap {
-  background: transparent !important;
-  background-color: transparent !important;
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
 }
-
-/* Keep the sponsor banner background intact */
 .sponsorBar {
-  background: linear-gradient(
-    135deg,
-    #080808 0%,
-    #191919 50%,
-    #080808 100%
-  ) !important;
+  position: absolute;
+  top: 200px;
+  left: 20px;
+  right: 20px;
 }
 
-/* Discount Kicks - taller, lower sponsor banner */
-
-/* Keep everything outside the banner transparent */
-html,
-body,
-.overlayWrap {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-
-/* Position the sponsor banner */
-.overlayWrap {
-  position: fixed !important;
-  top: 60px !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 250px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Make the banner taller and full width */
-.overlayWrap .sponsorBar {
-  box-sizing: border-box !important;
-  width: 100% !important;
-  height: 250px !important;
-  min-height: 250px !important;
-  margin: 0 !important;
-}
-
+/* Existing black-and-gold production banner is retained. */
 /* DISCOUNT KICKS - FULL WIDTH LUXURY BANNER */
 
 .dkOverlay {
@@ -66,9 +46,9 @@ body,
 
 .dkBanner {
   position: absolute;
-  top: 60px;
-  left: 0;
-  width: 100%;
+  top: 200px;
+  left: 20px;
+  width: calc(100% - 40px);
   height: 250px;
   padding: 18px 24px;
   display: grid;
@@ -217,402 +197,143 @@ body,
 }
 
 
-/* DISCOUNT KICKS - POSITION AND TEXT FIT FIX */
 
-.dkBanner {
-  /* Lower banner another 100px */
-  top: 200px !important;
-
-  /* Keep a narrow margin on both sides */
-  left: 20px !important;
-  right: 20px !important;
-  width: calc(100% - 40px) !important;
-
-  /* Preserve banner height */
-  height: 250px !important;
-
-  /* Give content more usable space */
-  padding: 15px 12px !important;
-
-  /* Rebalance the three sections */
-  grid-template-columns: 22% 45% 33% !important;
-  column-gap: 0 !important;
-}
-
-/* Left sponsor heading */
-.dkLeft {
-  min-width: 0;
-  font-size: 25px !important;
-  line-height: 1.12 !important;
-  letter-spacing: -0.5px !important;
-}
-
-.dkGold {
-  font-size: 20px !important;
-}
-
-/* Center logo and brand */
-.dkCenter {
-  min-width: 0;
-  gap: 10px !important;
-  padding: 0 8px !important;
-}
-
-.dkLogoCircle {
-  width: 115px !important;
-  height: 115px !important;
-}
-
-.dkBrandInfo {
-  min-width: 0;
-}
-
-.dkBrand {
-  font-size: 30px !important;
-  line-height: 1.05 !important;
-  letter-spacing: 0 !important;
-  overflow-wrap: anywhere !important;
-}
-
-.dkTagline {
-  font-size: 11px !important;
-  letter-spacing: 0 !important;
-}
-
-/* Right sponsor message */
-.dkRight {
-  min-width: 0;
-  padding-left: 10px !important;
-  gap: 6px !important;
-}
-
-.dkShopLabel {
-  font-size: 16px !important;
-}
-
-.dkMessageBox {
-  font-size: 17px !important;
-  padding: 9px 6px !important;
-  line-height: 1.15 !important;
-  overflow-wrap: anywhere !important;
-}
-
-.dkFooter {
-  font-size: 13px !important;
-}
-
-/* WHITE AND RED SPONSOR BANNER - TEST VERSION */
-
+/* ==========================================================
+   WHITE / RED BANNER V2 - SINGLE SOURCE OF TRUTH
+   Markup: redOverlay > redBanner redBannerV2 >
+   redSponsorLabel, redLogo, redSponsorContent
+   ========================================================== */
 .redOverlay {
-  position: fixed;
-  inset: 0;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
   background: transparent !important;
-  pointer-events: none;
+  pointer-events: none !important;
   z-index: 100;
 }
 
-.redBanner {
-  position: absolute;
-  top: 200px;
-  left: 20px;
-  width: calc(100% - 40px);
-  height: 180px;
-  display: grid;
-  grid-template-columns: 17% 48% 35%;
-  align-items: center;
-  overflow: hidden;
-  border: 2px solid #dedede;
-  border-radius: 14px;
-  background:
-    linear-gradient(130deg, #ffffff, #f0f0f0 55%, #ffffff);
-  box-shadow: 0 6px 22px rgba(0,0,0,.35);
-  color: #111;
+/* Fixed positioning prevents parent centering rules from moving the banner. */
+.redOverlay .redBanner.redBannerV2 {
+  position: fixed !important;
+  top: 200px !important;
+  left: 20px !important;
+  right: 20px !important;
+  bottom: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+  width: calc(100% - 40px) !important;
+  height: 175px !important;
+  padding: 12px 18px !important;
+  display: grid !important;
+  grid-template-columns: 185px 135px minmax(0, 1fr) !important;
+  gap: 12px !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  border: 2px solid #dedede !important;
+  border-radius: 15px !important;
+  background: linear-gradient(130deg, #fff 0%, #f2f2f2 60%, #fff 100%) !important;
+  box-shadow: 0 6px 22px rgba(0,0,0,.35) !important;
+  color: #111 !important;
+  font-family: Inter, Arial, sans-serif;
 }
 
-.redSponsorLabel {
+.redBannerV2 .redSponsorLabel {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
-  min-width: 0;
-  height: 100%;
-  background:
-    linear-gradient(135deg, #e50914 0 12%, transparent 12%),
-    linear-gradient(315deg, #dcdcdc 0 12%, transparent 12%);
+  text-align: center;
+  background: transparent;
 }
-
-.redSponsorLabel span {
-  font-size: 19px;
+.redBannerV2 .redSponsorLabel span {
+  display: inline-block;
+  max-width: 100%;
+  padding-bottom: 7px;
+  border-bottom: 4px solid #e50914;
+  color: #151515;
+  font-size: 18px;
   font-weight: 900;
   font-style: italic;
-  line-height: 1.1;
-  text-align: center;
-  color: #171717;
-  border-bottom: 4px solid #e50914;
-  padding-bottom: 7px;
+  line-height: 1.12;
+  white-space: normal;
 }
 
-.redIdentity {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  gap: 12px;
-  padding: 0 10px;
-}
-
-.redLogo {
+.redBannerV2 .redLogo {
+  position: relative;
   width: 112px;
   height: 112px;
+  margin: auto;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   border: 5px solid #e50914;
   border-radius: 50%;
-  background: #fff;
+  background: white;
   color: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  flex-shrink: 0;
-  font-size: 49px;
-  font-weight: 950;
-  letter-spacing: -5px;
 }
-
-.redCrown {
-  position: absolute;
-  top: -14px;
-  font-size: 31px;
-  letter-spacing: 0;
-}
-
-.redBrandBlock {
-  min-width: 0;
-}
-
-.redBrandName {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0 8px;
-  font-size: 39px;
-  font-weight: 950;
-  line-height: 1.03;
-  letter-spacing: -1px;
-}
-
-.redBrandName strong {
-  color: #df0612;
-  font-weight: 950;
-}
-
-.redTagline {
-  margin-top: 8px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.redCTA {
-  height: 80%;
-  margin-right: 10px;
-  border-radius: 20px;
-  border: 3px solid #ff313b;
-  background: linear-gradient(120deg, #f00b19, #a90009);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 12px;
-  min-width: 0;
-}
-
-.redCart {
-  font-size: 38px;
-  flex-shrink: 0;
-}
-
-.redCTAText {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  font-weight: 900;
-  line-height: 1.2;
-}
-
-.redCTAText span {
-  font-size: 21px;
-}
-
-.redCTAText strong {
-  font-size: 23px;
-  overflow-wrap: anywhere;
-}
-
-/* DYNAMIC WHITE AND RED SPONSOR BANNER */
-
-.redLogo {
-  overflow: hidden;
-}
-
-.redLogo img {
+.redBannerV2 .redLogo img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: white;
 }
-
 .redLogoFallback {
-  font-size: 45px;
+  font-size: 42px;
   font-weight: 950;
   letter-spacing: -2px;
 }
 
-.redBrandName {
+.redBannerV2 .redSponsorContent {
   min-width: 0;
-  overflow-wrap: anywhere;
-  font-size: clamp(20px, 3.2vw, 39px);
-}
-
-.redCTAText {
-  display: block;
-  text-align: center;
-  font-size: clamp(15px, 2.2vw, 23px);
-  font-weight: 900;
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-  max-height: 100%;
-  overflow: hidden;
-}
-
-.redCTA {
-  padding: 12px 15px;
-  overflow: hidden;
-}
-
-/* DISCOUNT KICKS - WHITE & RED BANNER V2 */
-
-.redBannerV2 {
-  top: 200px !important;
-  left: 20px !important;
-  width: calc(100% - 40px) !important;
-  height: 175px !important;
-  padding: 12px 18px !important;
-
-  display: grid !important;
-  grid-template-columns: 22% 15% 63% !important;
-  align-items: center !important;
-  gap: 0 !important;
-
-  background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #f2f2f2 60%,
-    #ffffff 100%
-  ) !important;
-
-  border: 2px solid #e2e2e2 !important;
-  border-radius: 15px !important;
-  overflow: hidden !important;
-}
-
-.redBannerV2 .redSponsorLabel {
-  padding: 8px !important;
-  background: transparent !important;
-}
-
-.redBannerV2 .redSponsorLabel span {
-  font-size: 20px !important;
-  color: #111 !important;
-  border-bottom: 4px solid #e50914 !important;
-  white-space: nowrap;
-}
-
-.redBannerV2 .redLogo {
-  width: 118px !important;
-  height: 118px !important;
-  margin: auto !important;
-  border: 5px solid #e50914 !important;
-}
-
-.redSponsorContent {
-  min-width: 0;
-  padding: 0 15px 0 22px;
+  max-width: 100%;
+  height: 100%;
+  padding: 0 8px 0 20px;
   border-left: 3px solid #222;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   justify-content: center;
-  gap: 10px;
+  gap: 9px;
 }
-
 .redBannerV2 .redBrandName {
-  font-size: 44px !important;
-  line-height: 1.05 !important;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 9px;
+  row-gap: 0;
+  min-width: 0;
+  font-size: 42px;
   font-weight: 950;
-  white-space: normal;
+  line-height: 1.02;
+  letter-spacing: -1px;
+  color: #111;
   overflow-wrap: anywhere;
 }
-
 .redBannerV2 .redBrandName strong {
-  color: #e50914 !important;
+  color: #e50914;
+  font-weight: 950;
 }
-
-.redSponsorMessage {
+.redBannerV2 .redSponsorMessage {
   width: 100%;
-  padding: 10px 14px;
-  border-radius: 30px;
+  max-width: 100%;
+  min-width: 0;
+  padding: 9px 14px;
+  border-radius: 28px;
   background: linear-gradient(90deg, #ed101d, #ba000b);
   color: #fff;
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 900;
+  line-height: 1.12;
   text-align: center;
-  line-height: 1.2;
   overflow-wrap: anywhere;
 }
-
-/* WHITE & RED BANNER - SPACING AND POSITION FIX */
-
-.redBannerV2 {
-  top: 200px !important;
-  left: 30px !important;
-  width: calc(100% - 60px) !important;
-
-  /* Give sponsor name and message more room */
-  grid-template-columns: 18% 15% 67% !important;
-  padding: 12px 20px !important;
-}
-
-.redBannerV2 .redSponsorLabel {
-  min-width: 0 !important;
-  padding: 4px !important;
-}
-
-.redBannerV2 .redSponsorLabel span {
-  font-size: 16px !important;
-  white-space: normal !important;
-  text-align: center !important;
-  line-height: 1.15 !important;
-}
-
-.redBannerV2 .redLogo {
-  width: 100px !important;
-  height: 100px !important;
-}
-
-.redSponsorContent {
-  padding-left: 15px !important;
-  padding-right: 8px !important;
-  gap: 6px !important;
-}
-
-.redBannerV2 .redBrandName {
-  font-size: 38px !important;
-  line-height: 1.05 !important;
-}
-
-.redSponsorMessage {
-  font-size: 18px !important;
-  padding: 8px 12px !important;
-  line-height: 1.15 !important;
-}
-
