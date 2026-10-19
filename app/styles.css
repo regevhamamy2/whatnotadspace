@@ -1,339 +1,100 @@
-/* Dashboard styles preserved from original file. */
-*{box-sizing:border-box}html,body{margin:0;font-family:Inter,Arial,sans-serif;background:#0a0a0a;color:#f6f6f6}a{color:#d9b75f}.center{min-height:100vh;display:grid;place-items:center;padding:24px}.dash{max-width:1200px;margin:0 auto;padding:24px}header{display:flex;justify-content:space-between;gap:24px;align-items:center;margin-bottom:20px}.card{background:#151515;border:1px solid #2e2e2e;border-radius:18px;padding:22px;box-shadow:0 12px 40px rgba(0,0,0,.25);margin-bottom:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.inline{display:flex;flex-wrap:wrap;gap:14px;align-items:end;margin:16px 0}.showTop{display:flex;justify-content:space-between;gap:20px}.metrics{display:flex;flex-direction:column;text-align:right;color:#d9b75f}label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#cfcfcf}input{background:#0d0d0d;color:white;border:1px solid #3a3a3a;border-radius:10px;padding:10px 12px}input[type=checkbox]{width:auto}.slots{display:grid;gap:10px;margin:18px 0}.slot{display:grid;grid-template-columns:44px 1fr 1.2fr 1.2fr auto auto;gap:10px;align-items:center}.slotNum{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#d9b75f;color:#111;font-weight:800}button{background:#d9b75f;color:#111;border:0;border-radius:10px;padding:11px 16px;font-weight:800;cursor:pointer}.ghost{background:transparent;color:#ddd;border:1px solid #444}.overlayWrap{position:fixed;inset:0;background:transparent;pointer-events:none}.sponsorBar{position:absolute;left:26px;right:26px;top:26px;min-height:132px;border-radius:22px;padding:18px 22px;background:linear-gradient(180deg,#1a1a1a,#090909);border:2px solid #d9b75f;box-shadow:0 8px 35px rgba(0,0,0,.55);display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr;color:white}.eyebrow{font-size:18px;letter-spacing:2px;color:#e5c86f;font-weight:800}.brandBlock{display:flex;gap:16px;align-items:center}.brandBlock img{height:56px;max-width:180px;object-fit:contain;background:white;border-radius:8px;padding:5px}.brand{font-size:34px;font-weight:900;line-height:1.05}.message{font-size:17px;margin-top:5px;color:#efefef}.rightBadge{grid-column:2;grid-row:1/3;align-self:center;padding:12px 16px;border-radius:999px;border:1px solid #d9b75f;color:#e5c86f;font-weight:900;letter-spacing:1px}@media(max-width:800px){.slot{grid-template-columns:40px 1fr}.slot>*:nth-child(n+3){grid-column:2}.showTop{flex-direction:column}.metrics{text-align:left}}
+/* Discount Kicks | Clean dashboard and navy sponsor overlay
+   OBS canvas: 1080 x 1920; banner: 1020 x 200 at x=30, y=200.
+   Keeps compatibility with the existing red1 preview JSX.
+   A sponsor-upload workflow requires additional application code. */
 
-/* ==========================================================
-   DISCOUNT KICKS - CLEAN SPONSOR OVERLAY STYLES
-   Designed for a 1080 x 1920 OBS Browser Source.
-   ========================================================== */
+/* DASHBOARD - preserve existing selectors and appearance */
+* { box-sizing: border-box; }
+html, body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0a0a0a; color: #f6f6f6; }
+a { color: #d9b75f; }
+.center { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.dash { max-width: 1200px; margin: 0 auto; padding: 24px; }
+header { display: flex; justify-content: space-between; gap: 24px; align-items: center; margin-bottom: 20px; }
+.card { background: #151515; border: 1px solid #2e2e2e; border-radius: 18px; padding: 22px; box-shadow: 0 12px 40px rgba(0,0,0,.25); margin-bottom: 22px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 14px; }
+.inline { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; margin: 16px 0; }
+.showTop { display: flex; justify-content: space-between; gap: 20px; }
+.metrics { display: flex; flex-direction: column; text-align: right; color: #d9b75f; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #cfcfcf; }
+input { background: #0d0d0d; color: white; border: 1px solid #3a3a3a; border-radius: 10px; padding: 10px 12px; }
+input[type=checkbox] { width: auto; }
+.slots { display: grid; gap: 10px; margin: 18px 0; }
+.slot { display: grid; grid-template-columns: 44px 1fr 1.2fr 1.2fr auto auto; gap: 10px; align-items: center; }
+.slotNum { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: #d9b75f; color: #111; font-weight: 800; }
+button { background: #d9b75f; color: #111; border: 0; border-radius: 10px; padding: 11px 16px; font-weight: 800; cursor: pointer; }
+.ghost { background: transparent; color: #ddd; border: 1px solid #444; }
+@media(max-width:800px) { .slot { grid-template-columns: 40px 1fr; } .slot>*:nth-child(n+3) { grid-column: 2; } .showTop { flex-direction: column; } .metrics { text-align: left; } }
 
-/* Keep the OBS canvas transparent, without changing the dashboard. */
-html:has(.redOverlay),
-body:has(.redOverlay),
-html:has(.dkOverlay),
-body:has(.dkOverlay),
-html:has(.overlayWrap),
-body:has(.overlayWrap) {
-  background: transparent !important;
-  background-color: transparent !important;
-}
+/* OBS transparent canvas (dashboard remains dark) */
+html:has(.redOverlay), body:has(.redOverlay),
+html:has(.dkOverlay), body:has(.dkOverlay),
+html:has(.overlayWrap), body:has(.overlayWrap) { background: transparent !important; }
+.redOverlay, .dkOverlay, .overlayWrap { position: fixed; inset: 0; background: transparent; pointer-events: none; }
 
-/* Legacy overlay support (does not affect the red preview). */
-.overlayWrap {
-  position: fixed;
-  inset: 0;
-  background: transparent;
-  pointer-events: none;
-}
-.sponsorBar {
-  position: absolute;
-  top: 200px;
-  left: 20px;
-  right: 20px;
-}
-
-/* Existing black-and-gold production banner is retained. */
-/* DISCOUNT KICKS - FULL WIDTH LUXURY BANNER */
-
-.dkOverlay {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent !important;
-  pointer-events: none;
-  z-index: 100;
-}
-
-.dkBanner {
-  position: absolute;
-  top: 200px;
-  left: 20px;
-  width: calc(100% - 40px);
-  height: 250px;
-  padding: 18px 24px;
-  display: grid;
-  grid-template-columns: 23% 43% 34%;
-  align-items: center;
-  overflow: hidden;
-  border-top: 8px solid #d6ac43;
-  border-bottom: 8px solid #d6ac43;
-  background: linear-gradient(
-    160deg,
-    #050505 0%,
-    #181818 38%,
-    #030303 72%,
-    #111111 100%
-  );
-  box-shadow:
-    0 8px 25px rgba(0,0,0,.55),
-    inset 0 2px 10px rgba(255,225,140,.18);
-  color: white;
-}
-
-.dkBanner::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 4px;
-  background: linear-gradient(
-    90deg,
-    #76520f,
-    #fff3ad,
-    #b88b25,
-    #fff3ad,
-    #76520f
-  );
-}
-
-.dkLeft {
-  text-align: center;
-  font-size: 31px;
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: -.7px;
-}
-
-.dkGold {
-  color: #e7c46a;
-  font-size: 25px;
-}
-
-.dkCenter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 17px;
-  min-width: 0;
-  padding: 0 15px;
-}
-
-.dkLogoCircle {
-  flex-shrink: 0;
-  width: 145px;
-  height: 145px;
-  border: 5px solid #e4bf62;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background: #070707;
-  box-shadow: 0 0 15px rgba(225,180,75,.3);
-}
-
-.dkLogoCircle img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.dkLogoLetters {
-  font-size: 60px;
-  font-weight: 950;
-  color: #e6be60;
-  letter-spacing: -5px;
-}
-
-.dkBrandInfo {
-  min-width: 0;
-  text-align: left;
-}
-
-.dkBrand {
-  font-size: 39px;
-  line-height: 1.05;
-  font-weight: 950;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  color: #e4bf62;
-  overflow-wrap: anywhere;
-}
-
-.dkTagline {
-  margin-top: 10px;
-  font-size: 14px;
-  font-weight: 800;
-  color: #f4e1ac;
-  letter-spacing: .8px;
-}
-
-.dkRight {
-  height: 85%;
-  border-left: 2px solid #b78c39;
-  padding-left: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  text-align: center;
-  gap: 9px;
-  min-width: 0;
-}
-
-.dkShopLabel {
-  font-size: 20px;
-  font-weight: 900;
-  color: white;
-}
-
-.dkMessageBox {
-  border: 3px solid #e2be65;
-  border-radius: 13px;
-  padding: 12px 9px;
-  color: #e8c56b;
-  font-size: 23px;
-  line-height: 1.2;
-  font-weight: 900;
-  overflow-wrap: anywhere;
-  box-shadow: inset 0 0 10px rgba(230,190,90,.15);
-}
-
-.dkFooter {
-  font-size: 16px;
-  font-weight: 900;
-  color: white;
-}
-
-
-
-/* ==========================================================
-   WHITE / RED BANNER V2 - SINGLE SOURCE OF TRUTH
-   Markup: redOverlay > redBanner redBannerV2 >
-   redSponsorLabel, redLogo, redSponsorContent
-   ========================================================== */
-.redOverlay {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  display: block !important;
-  background: transparent !important;
-  pointer-events: none !important;
-  z-index: 100;
-}
-
-/* Fixed positioning prevents parent centering rules from moving the banner. */
+/* CURRENT WHITE/NAVY DESIGN - matches existing red1 preview JSX */
+.redOverlay { width: 100%; height: 100%; z-index: 100; }
 .redOverlay .redBanner.redBannerV2 {
-  position: fixed !important;
+  position: absolute !important;
   top: 200px !important;
-  left: 20px !important;
-  right: 20px !important;
   bottom: auto !important;
+  left: 30px !important;
+  right: auto !important;
   transform: none !important;
-  margin: 0 !important;
-  width: calc(100% - 40px) !important;
-  height: 175px !important;
-  padding: 12px 18px !important;
+  width: 1020px !important;
+  height: 200px !important;
   display: grid !important;
-  grid-template-columns: 185px 135px minmax(0, 1fr) !important;
-  gap: 12px !important;
+  grid-template-columns: 190px 125px minmax(0,1fr) !important;
+  gap: 14px !important;
   align-items: center !important;
+  padding: 14px 22px !important;
   overflow: hidden !important;
-  box-sizing: border-box !important;
-  border: 2px solid #dedede !important;
-  border-radius: 15px !important;
-  background: linear-gradient(130deg, #fff 0%, #f2f2f2 60%, #fff 100%) !important;
-  box-shadow: 0 6px 22px rgba(0,0,0,.35) !important;
-  color: #111 !important;
-  font-family: Inter, Arial, sans-serif;
+  border: 2px solid #9aaec8 !important;
+  border-radius: 18px !important;
+  background: linear-gradient(125deg,#fff 0%,#f3f7fb 60%,#fff 100%) !important;
+  box-shadow: 0 7px 22px rgba(0,0,0,.3) !important;
+  color: #101b2e !important;
 }
+.redBannerV2::before { content: ''; position: absolute; left: 0; top: 0; width: 17px; height: 100%; background: linear-gradient(180deg,#214b7c,#102d52); }
+.redBannerV2::after { content: ''; position: absolute; right: 0; top: 0; width: 20px; height: 100%; background: linear-gradient(155deg,#17365d,#2c619c); }
+.redBannerV2 .redSponsorLabel { display: flex; align-items: center; justify-content: center; min-width: 0; padding: 8px 2px 8px 9px; text-align: center; background: transparent; }
+.redBannerV2 .redSponsorLabel span { display: block; max-width: 100%; font-size: 22px; line-height: 1.12; font-weight: 900; font-style: italic; color: #142d4c; border-bottom: 4px solid #244d7d; padding-bottom: 9px; overflow-wrap: normal; }
+.redBannerV2 .redLogo { width: 108px; height: 108px; margin: auto; border: 4px solid #244d7d; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #18375c; flex-shrink: 0; }
+.redBannerV2 .redLogo img { width: 100%; height: 100%; object-fit: contain; }
+.redBannerV2 .redLogoFallback { font-size: 36px; font-weight: 900; letter-spacing: -1px; }
+.redBannerV2 .redSponsorContent { display: flex; flex-direction: column; justify-content: center; gap: 9px; min-width: 0; padding: 0 18px 0 16px; border-left: 2px solid #c4ceda; }
+.redBannerV2 .redBrandName { display: flex; flex-wrap: wrap; gap: 0 10px; min-width: 0; font-size: 38px; line-height: 1.07; font-weight: 950; letter-spacing: -.7px; color: #131d2b; overflow-wrap: anywhere; }
+.redBannerV2 .redBrandName strong { color: #234c80; font-weight: 950; }
+.redBannerV2 .redSponsorMessage { max-width: 100%; padding: 10px 16px; border-radius: 999px; background: linear-gradient(90deg,#214b7d,#132f53); color: #fff; font-size: 19px; line-height: 1.18; font-weight: 900; text-align: center; overflow-wrap: anywhere; }
 
-.redBannerV2 .redSponsorLabel {
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: transparent;
-}
-.redBannerV2 .redSponsorLabel span {
-  display: inline-block;
-  max-width: 100%;
-  padding-bottom: 7px;
-  border-bottom: 4px solid #e50914;
-  color: #151515;
-  font-size: 18px;
-  font-weight: 900;
-  font-style: italic;
-  line-height: 1.12;
-  white-space: normal;
-}
+/* FUTURE CUSTOM-ARTWORK MODE: JSX must render .sponsorArtwork inside .sponsorArtworkFrame.
+   This mode reserves 205px for Sponsored By and 815px for sponsor artwork. */
+.redOverlay .redBanner.redBannerV2.artworkMode { grid-template-columns: 205px minmax(0,1fr) !important; gap: 0 !important; padding: 10px 20px !important; }
+.artworkMode .redSponsorLabel { height: 100%; }
+.sponsorArtworkFrame { width: 100%; height: 176px; min-width: 0; overflow: hidden; border: 1px solid #d8e0e9; border-radius: 10px; background: #fff; }
+.sponsorArtwork { display: block; width: 100%; height: 100%; object-fit: contain; }
 
-.redBannerV2 .redLogo {
-  position: relative;
-  width: 112px;
-  height: 112px;
-  margin: auto;
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 5px solid #e50914;
-  border-radius: 50%;
-  background: white;
-  color: #111;
-}
-.redBannerV2 .redLogo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.redLogoFallback {
-  font-size: 42px;
-  font-weight: 950;
-  letter-spacing: -2px;
-}
+/* LEGACY BLACK/GOLD BANNER - retained until production switches */
+.dkOverlay { z-index: 100; }
+.dkBanner { position: absolute; top: 200px; left: 20px; width: calc(100% - 40px); height: 250px; padding: 15px 12px; display: grid; grid-template-columns: 22% 45% 33%; align-items: center; overflow: hidden; border-top: 8px solid #d6ac43; border-bottom: 8px solid #d6ac43; background: linear-gradient(160deg,#050505,#181818 38%,#030303 72%,#111); color: #fff; box-shadow: 0 8px 25px rgba(0,0,0,.55); }
+.dkLeft { text-align: center; min-width: 0; font-size: 25px; font-weight: 900; line-height: 1.12; }
+.dkGold { color: #e7c46a; font-size: 20px; }
+.dkCenter { display: flex; align-items: center; justify-content: center; gap: 10px; min-width: 0; padding: 0 8px; }
+.dkLogoCircle { flex-shrink: 0; width: 115px; height: 115px; border: 5px solid #e4bf62; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #070707; }
+.dkLogoCircle img { width: 100%; height: 100%; object-fit: contain; }
+.dkLogoLetters { font-size: 50px; font-weight: 950; color: #e6be60; }
+.dkBrandInfo { min-width: 0; }
+.dkBrand { font-size: 30px; line-height: 1.05; font-weight: 950; color: #e4bf62; overflow-wrap: anywhere; }
+.dkTagline { margin-top: 10px; font-size: 11px; font-weight: 800; color: #f4e1ac; }
+.dkRight { height: 85%; border-left: 2px solid #b78c39; padding-left: 10px; display: flex; flex-direction: column; justify-content: center; text-align: center; gap: 6px; min-width: 0; }
+.dkShopLabel { font-size: 16px; font-weight: 900; }
+.dkMessageBox { border: 3px solid #e2be65; border-radius: 13px; padding: 9px 6px; color: #e8c56b; font-size: 17px; line-height: 1.15; font-weight: 900; overflow-wrap: anywhere; }
+.dkFooter { font-size: 13px; font-weight: 900; }
 
-.redBannerV2 .redSponsorContent {
-  min-width: 0;
-  max-width: 100%;
-  height: 100%;
-  padding: 0 8px 0 20px;
-  border-left: 3px solid #222;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  gap: 9px;
-}
-.redBannerV2 .redBrandName {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: 9px;
-  row-gap: 0;
-  min-width: 0;
-  font-size: 42px;
-  font-weight: 950;
-  line-height: 1.02;
-  letter-spacing: -1px;
-  color: #111;
-  overflow-wrap: anywhere;
-}
-.redBannerV2 .redBrandName strong {
-  color: #e50914;
-  font-weight: 950;
-}
-.redBannerV2 .redSponsorMessage {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  padding: 9px 14px;
-  border-radius: 28px;
-  background: linear-gradient(90deg, #ed101d, #ba000b);
-  color: #fff;
-  font-size: 21px;
-  font-weight: 900;
-  line-height: 1.12;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
+/* Original sponsorBar selectors kept for compatibility with older pages */
+.sponsorBar { position: absolute; left: 26px; right: 26px; top: 26px; min-height: 132px; border-radius: 22px; padding: 18px 22px; background: linear-gradient(180deg,#1a1a1a,#090909); border: 2px solid #d9b75f; box-shadow: 0 8px 35px rgba(0,0,0,.55); display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr; color: #fff; }
+.eyebrow { font-size: 18px; letter-spacing: 2px; color: #e5c86f; font-weight: 800; }
+.brandBlock { display: flex; gap: 16px; align-items: center; }
+.brandBlock img { height: 56px; max-width: 180px; object-fit: contain; background: white; border-radius: 8px; padding: 5px; }
+.brand { font-size: 34px; font-weight: 900; line-height: 1.05; }
+.message { font-size: 17px; margin-top: 5px; color: #efefef; }
+.rightBadge { grid-column: 2; grid-row: 1/3; align-self: center; padding: 12px 16px; border-radius: 999px; border: 1px solid #d9b75f; color: #e5c86f; font-weight: 900; letter-spacing: 1px; }
