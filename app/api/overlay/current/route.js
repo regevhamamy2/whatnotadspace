@@ -50,9 +50,10 @@ export async function GET(request) {
       'artwork_url'
     ];
 
-    const selection =
-      `${showFields.join(',')},` +
-      `sponsor_slots(${slotFields.join(',')})`;
+    const selection = [
+  ...showFields,
+  `sponsor_slots(${slotFields.join(',')})`
+].join(',');
 
     const query =
       `shows?channel_slug=eq.${encodeURIComponent(channel)}` +
