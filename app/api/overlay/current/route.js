@@ -25,8 +25,6 @@ export async function GET(request) {
 
     const now = new Date().toISOString();
 
-    // Explicitly select public show fields.
-    // Never return the complete database record.
     const showFields = [
       'id',
       'title',
@@ -41,9 +39,6 @@ export async function GET(request) {
       'exclusive_logo_url'
     ];
 
-    // Keep legacy fields for the existing OBS overlay.
-    // Include approved artwork for the new overlay.
-    // Never expose pending artwork or token hashes.
     const slotFields = [
       'id',
       'position',
@@ -59,16 +54,15 @@ export async function GET(request) {
       `${showFields.join(',')},` +
       `sponsor_slots(${slotFields.join(',')})`;
 
-    const query = new URLSearchParams();
+    const query =
+      `shows?channel_slug=eq.${encodeURIComponent(channel)}` +
+      `&starts_at=lte.${encodeURIComponent(now)}` +
+      `&ends_at=gte.${encodeURIComponent(now)}` +
+      `&select=${selection}` +
+      `&order=starts_at.desc` +
+      `&limit=1`;
 
-    query.set('channel_slug', `eq.${channel}`);
-    query.set('starts_at', `lte.${now}`);
-    query.set('ends_at', `gte.${now}`);
-    query.set('select', selection);
-    query.set('order', 'starts_at.desc');
-    query.set('limit', '1');
-
-    const rows = await sb(`shows?${query.toString()}`);
+    const rows = await sb(query);
 
     if (!rows?.length) {
       return NextResponse.json({
