@@ -66,36 +66,18 @@ export default function Overlay() {
   if (!data?.active || !data.show) return null;
 
   const show = data.show;
-  let item;
 
+  // NEW WHITE-AND-NAVY TEST BANNER
   if (preview) {
-    // Preview uses approved artwork only.
-    // Unapproved submissions are never displayed.
-    const approved = (show.sponsor_slots || [])
-      .filter(slot =>
-        slot.active &&
-        slot.artwork_url &&
-        (slot.artwork_status === 'approved' ||
-          !('artwork_status' in slot))
-      )
-      .sort((a, b) => a.position - b.position);
-
-    // The public API intentionally does not expose
-    // artwork_status. artwork_url is populated only
-    // by the administrator approval endpoint.
     const eligible = (show.sponsor_slots || [])
       .filter(slot => slot.active && slot.artwork_url)
       .sort((a, b) => a.position - b.position);
 
-    const pool = show.exclusive_mode
-      ? []
-      : eligible;
-
-    const selected = pool.length
-      ? pool[idx % pool.length]
-      : null;
-
-    const isHouse = !selected;
+    const selected = show.exclusive_mode
+      ? null
+      : eligible.length
+        ? eligible[idx % eligible.length]
+        : null;
 
     return (
       <div
@@ -118,75 +100,77 @@ export default function Overlay() {
             width: 1020,
             height: 200,
             display: 'flex',
+            alignItems: 'center',
             overflow: 'hidden',
             boxSizing: 'border-box',
             background: '#ffffff',
-            border: '3px solid #142d4e',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.25)'
+            borderRadius: 15,
+            border: '2px solid #dce5ef',
+            boxShadow: '0 7px 18px rgba(0,0,0,0.18)'
           }}
         >
+          {/* Thin navy accent on the left */}
           <div
             style={{
-              position: 'relative',
-              width: 200,
-              minWidth: 200,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: 13,
               height: '100%',
-              background: '#142d4e',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              background: '#142d4e'
+            }}
+          />
+
+          {/* Permanent sponsor label */}
+          <div
+            style={{
+              width: 235,
+              minWidth: 235,
+              height: '100%',
               boxSizing: 'border-box',
-              padding: '20px 22px',
-              zIndex: 2
+              padding: '0 24px 0 38px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}
           >
             <div
               style={{
-                fontSize: 23,
+                color: '#142d4e',
+                fontSize: 24,
                 fontWeight: 900,
-                lineHeight: 1.25,
-                letterSpacing: 1.3,
+                fontStyle: 'italic',
+                letterSpacing: 0.8,
+                lineHeight: 1.15,
                 textAlign: 'center'
               }}
             >
               SPONSORED
-              <div
-                style={{
-                  fontSize: 28,
-                  marginTop: 5
-                }}
-              >
-                BY
-              </div>
+              <div>BY</div>
             </div>
 
             <div
               style={{
-                position: 'absolute',
-                right: -15,
-                top: 0,
-                height: '100%',
-                width: 30,
+                width: 150,
+                height: 3,
                 background: '#142d4e',
-                transform: 'skewX(-9deg)',
-                zIndex: -1
+                marginTop: 15
               }}
             />
           </div>
 
+          {/* Sponsor's finished artwork */}
           <div
             style={{
               flex: 1,
               minWidth: 0,
               height: '100%',
-              background: '#ffffff',
+              boxSizing: 'border-box',
+              padding: '12px 26px 12px 8px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              boxSizing: 'border-box',
-              padding: '12px 22px 12px 28px',
-              position: 'relative'
+              justifyContent: 'center'
             }}
           >
             {selected ? (
@@ -204,6 +188,7 @@ export default function Overlay() {
             ) : (
               <div
                 style={{
+                  width: '100%',
                   textAlign: 'center',
                   color: '#142d4e'
                 }}
@@ -212,33 +197,39 @@ export default function Overlay() {
                   style={{
                     fontSize: 39,
                     fontWeight: 900,
-                    letterSpacing: 2
+                    letterSpacing: 0.5
                   }}
                 >
                   YOUR BRAND HERE
                 </div>
+
                 <div
                   style={{
-                    fontSize: 19,
+                    background: '#142d4e',
+                    color: '#ffffff',
+                    borderRadius: 24,
+                    padding: '9px 18px',
                     marginTop: 12,
-                    letterSpacing: 1.5
+                    fontSize: 17,
+                    fontWeight: 700,
+                    letterSpacing: 0.5
                   }}
                 >
-                  ADVERTISE WITH DISCOUNT KICKS
+                  ADVERTISE WITH US • $250 PER SLOT
                 </div>
               </div>
             )}
           </div>
 
+          {/* Thin navy accent on the right */}
           <div
             style={{
               position: 'absolute',
-              right: 0,
               top: 0,
-              width: 12,
+              right: 0,
+              width: 13,
               height: '100%',
-              background:
-                'repeating-linear-gradient(135deg,#142d4e 0px,#142d4e 5px,#dbe3ed 5px,#dbe3ed 11px)'
+              background: '#142d4e'
             }}
           />
         </div>
@@ -246,8 +237,10 @@ export default function Overlay() {
     );
   }
 
-  // ORIGINAL PRODUCTION BANNER:
-  // Keep this unchanged until preview is approved.
+  // ORIGINAL PRODUCTION BANNER
+  // This section remains unchanged.
+
+  let item;
 
   if (show.exclusive_mode) {
     item = {
