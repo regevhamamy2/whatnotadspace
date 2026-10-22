@@ -51,9 +51,9 @@ export async function GET(request) {
     ];
 
     const selection = [
-  ...showFields,
-  `sponsor_slots(${slotFields.join(',')})`
-].join(',');
+      ...showFields,
+      `sponsor_slots(${slotFields.join(',')})`
+    ].join(',');
 
     const query =
       `shows?channel_slug=eq.${encodeURIComponent(channel)}` +
@@ -63,13 +63,32 @@ export async function GET(request) {
       `&order=starts_at.desc` +
       `&limit=1`;
 
-    const rows = await sb(query);
+    const [rows, houseRows] = await Promise.all([
+      sb(query),
+      sb(
+        `house_ads?channel_slug=eq.${encodeURIComponent(channel)}` +
+        `&select=enabled,artwork_url`
+      )
+    ]);
+
+    const houseAd = houseRows?.[0] || {
+      enabled: false,
+      artwork_url: null
+    };
 
     if (!rows?.length) {
-      return NextResponse.json({
-        active: false,
-        channel
-      });
+      return NextResponse.json(
+        {
+          active: false,
+          channel,
+          house_ad: houseAd
+        },
+        {
+          headers: {
+            'Cache-Control': 'no-store, max-age=0'
+          }
+        }
+      );
     }
 
     const show = rows[0];
@@ -77,14 +96,16 @@ export async function GET(request) {
     show.sponsor_slots = (
       show.sponsor_slots || []
     ).sort(
-      (a, b) => Number(a.position) - Number(b.position)
+      (a, b) =>
+        Number(a.position) - Number(b.position)
     );
 
     return NextResponse.json(
       {
         active: true,
         channel,
-        show
+        show,
+        house_ad: houseAd
       },
       {
         headers: {
