@@ -67,7 +67,7 @@ export default function Overlay() {
 
   const show = data.show;
 
-  // NEW WHITE-AND-NAVY TEST BANNER
+  // WHITE-AND-NAVY TEST BANNER ONLY
   if (preview) {
     const eligible = (show.sponsor_slots || [])
       .filter(slot => slot.active && slot.artwork_url)
@@ -109,7 +109,7 @@ export default function Overlay() {
             boxShadow: '0 7px 18px rgba(0,0,0,0.18)'
           }}
         >
-          {/* Thin navy accent on the left */}
+          {/* Left navy accent */}
           <div
             style={{
               position: 'absolute',
@@ -117,11 +117,12 @@ export default function Overlay() {
               left: 0,
               width: 13,
               height: '100%',
-              background: '#142d4e'
+              background: '#142d4e',
+              zIndex: 2
             }}
           />
 
-          {/* Permanent sponsor label */}
+          {/* Permanent SPONSORED BY label */}
           <div
             style={{
               width: 235,
@@ -132,7 +133,8 @@ export default function Overlay() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              background: '#ffffff'
             }}
           >
             <div
@@ -160,17 +162,17 @@ export default function Overlay() {
             />
           </div>
 
-          {/* Sponsor's finished artwork */}
+          {/* Full-size sponsor artwork area */}
           <div
             style={{
               flex: 1,
               minWidth: 0,
               height: '100%',
-              boxSizing: 'border-box',
-              padding: '12px 26px 12px 8px',
+              overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              background: '#ffffff'
             }}
           >
             {selected ? (
@@ -181,7 +183,8 @@ export default function Overlay() {
                 style={{
                   width: '100%',
                   height: '100%',
-                  objectFit: 'contain',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
                   display: 'block'
                 }}
               />
@@ -189,6 +192,8 @@ export default function Overlay() {
               <div
                 style={{
                   width: '100%',
+                  boxSizing: 'border-box',
+                  padding: '12px 26px',
                   textAlign: 'center',
                   color: '#142d4e'
                 }}
@@ -221,7 +226,7 @@ export default function Overlay() {
             )}
           </div>
 
-          {/* Thin navy accent on the right */}
+          {/* Right navy accent */}
           <div
             style={{
               position: 'absolute',
@@ -229,7 +234,8 @@ export default function Overlay() {
               right: 0,
               width: 13,
               height: '100%',
-              background: '#142d4e'
+              background: '#142d4e',
+              zIndex: 2
             }}
           />
         </div>
@@ -237,8 +243,7 @@ export default function Overlay() {
     );
   }
 
-  // ORIGINAL PRODUCTION BANNER
-  // This section remains unchanged.
+  // ORIGINAL PRODUCTION BANNER — UNCHANGED
 
   let item;
 
