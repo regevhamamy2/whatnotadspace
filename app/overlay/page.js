@@ -69,7 +69,7 @@ export default function Overlay() {
 
   const show = data.show;
 
-  // ONLY APPROVED, ACTIVE, PAID SPONSOR ARTWORK
+  // ACTIVE + PAID + APPROVED ARTWORK ONLY
   const eligible = (show.sponsor_slots || [])
     .filter(
       slot =>
@@ -83,17 +83,21 @@ export default function Overlay() {
         Number(b.position || 0)
     );
 
-  // HOUSE AD FOR AVAILABLE SPONSOR SPACE
+  // PERMANENT DISCOUNT KICKS HOUSE AD
+  const houseSettings = data.house_ad || {};
+
+  const houseEnabled =
+    houseSettings.enabled === true &&
+    !!houseSettings.artwork_url;
+
   const house = {
-    house: true
+    house: true,
+    artwork_url: houseSettings.artwork_url
   };
 
-  let selected;
+  let selected = null;
 
   if (show.exclusive_mode) {
-    // Exclusive sponsor artwork is not currently
-    // a separate field in the overlay API.
-    // Show existing exclusive sponsor details.
     selected = {
       exclusive: true,
       brand:
@@ -103,14 +107,22 @@ export default function Overlay() {
       logo_url: show.exclusive_logo_url
     };
   } else {
-    // Preserve a house advertising opportunity
-    // when fewer than 10 sponsors are eligible.
+    // HOUSE AD ONLY WHEN FEWER THAN 10
+    // ELIGIBLE PAID SPONSORS ARE AVAILABLE
     const pool =
-      eligible.length < 10
+      eligible.length < 10 && houseEnabled
         ? [...eligible, house]
         : eligible;
 
-    selected = pool[idx % pool.length] || house;
+    selected =
+      pool.length > 0
+        ? pool[idx % pool.length]
+        : null;
+  }
+
+  // NOTHING TO DISPLAY
+  if (!selected) {
+    return null;
   }
 
   return (
@@ -144,7 +156,11 @@ export default function Overlay() {
           <img
             key={selected.artwork_url}
             src={selected.artwork_url}
-            alt="Sponsor advertisement"
+            alt={
+              selected.house
+                ? 'Discount Kicks house advertisement'
+                : 'Sponsor advertisement'
+            }
             style={{
               display: 'block',
               width: '100%',
@@ -216,45 +232,7 @@ export default function Overlay() {
               </div>
             </div>
           </div>
-        ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              boxSizing: 'border-box',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: '#ffffff',
-              color: '#142d4e',
-              fontFamily: 'Arial, sans-serif'
-            }}
-          >
-            <div
-              style={{
-                fontWeight: 900,
-                fontSize: 38
-              }}
-            >
-              YOUR BRAND HERE
-            </div>
-
-            <div
-              style={{
-                marginTop: 12,
-                fontSize: 19,
-                fontWeight: 700,
-                color: '#ffffff',
-                background: '#142d4e',
-                borderRadius: 25,
-                padding: '10px 24px'
-              }}
-            >
-              ADVERTISE WITH US • ${show.slot_price || 250} PER SLOT
-            </div>
-          </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
