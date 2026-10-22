@@ -67,10 +67,16 @@ export default function Overlay() {
 
   const show = data.show;
 
-  // WHITE-AND-NAVY TEST BANNER ONLY
+ 
+  // FULL-WIDTH SPONSOR ARTWORK — TEST BANNER ONLY
   if (preview) {
     const eligible = (show.sponsor_slots || [])
-      .filter(slot => slot.active && slot.artwork_url)
+      .filter(
+        slot =>
+          slot.active &&
+          slot.paid &&
+          slot.artwork_url
+      )
       .sort((a, b) => a.position - b.position);
 
     const selected = show.exclusive_mode
@@ -88,8 +94,7 @@ export default function Overlay() {
           width: 1080,
           height: 1920,
           background: 'transparent',
-          pointerEvents: 'none',
-          fontFamily: 'Arial, sans-serif'
+          pointerEvents: 'none'
         }}
       >
         <div
@@ -99,145 +104,45 @@ export default function Overlay() {
             left: 30,
             width: 1020,
             height: 200,
-            display: 'flex',
-            alignItems: 'center',
             overflow: 'hidden',
             boxSizing: 'border-box',
             background: '#ffffff',
-            borderRadius: 15,
-            border: '2px solid #dce5ef',
+            borderRadius: 12,
             boxShadow: '0 7px 18px rgba(0,0,0,0.18)'
           }}
         >
-          {/* Left navy accent */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: 13,
-              height: '100%',
-              background: '#142d4e',
-              zIndex: 2
-            }}
-          />
-
-          {/* Permanent SPONSORED BY label */}
-          <div
-            style={{
-              width: 235,
-              minWidth: 235,
-              height: '100%',
-              boxSizing: 'border-box',
-              padding: '0 24px 0 38px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: '#ffffff'
-            }}
-          >
-            <div
+          {selected ? (
+            <img
+              key={selected.artwork_url}
+              src={selected.artwork_url}
+              alt="Sponsor advertisement"
               style={{
-                color: '#142d4e',
-                fontSize: 24,
-                fontWeight: 900,
-                fontStyle: 'italic',
-                letterSpacing: 0.8,
-                lineHeight: 1.15,
-                textAlign: 'center'
-              }}
-            >
-              SPONSORED
-              <div>BY</div>
-            </div>
-
-            <div
-              style={{
-                width: 150,
-                height: 3,
-                background: '#142d4e',
-                marginTop: 15
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center'
               }}
             />
-          </div>
-
-          {/* Full-size sponsor artwork area */}
-          <div
-            style={{
-              flex: 1,
-              minWidth: 0,
-              height: '100%',
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: '#ffffff'
-            }}
-          >
-            {selected ? (
-              <img
-                key={selected.artwork_url}
-                src={selected.artwork_url}
-                alt=""
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  display: 'block'
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  padding: '12px 26px',
-                  textAlign: 'center',
-                  color: '#142d4e'
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: 39,
-                    fontWeight: 900,
-                    letterSpacing: 0.5
-                  }}
-                >
-                  YOUR BRAND HERE
-                </div>
-
-                <div
-                  style={{
-                    background: '#142d4e',
-                    color: '#ffffff',
-                    borderRadius: 24,
-                    padding: '9px 18px',
-                    marginTop: 12,
-                    fontSize: 17,
-                    fontWeight: 700,
-                    letterSpacing: 0.5
-                  }}
-                >
-                  ADVERTISE WITH US • $250 PER SLOT
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Right navy accent */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              width: 13,
-              height: '100%',
-              background: '#142d4e',
-              zIndex: 2
-            }}
-          />
+          ) : (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#ffffff',
+                color: '#142d4e',
+                fontFamily: 'Arial, sans-serif',
+                fontWeight: 900,
+                fontSize: 38
+              }}
+            >
+              YOUR BRAND HERE
+            </div>
+          )}
         </div>
       </div>
     );
