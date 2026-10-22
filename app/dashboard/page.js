@@ -22,10 +22,16 @@ export default function Dashboard() {
   const [busy, setBusy] = useState(false);
   const [slotBusy, setSlotBusy] = useState('');
   const [generatedLinks, setGeneratedLinks] = useState({});
+  const [houseAd, setHouseAd] = useState(null);
+  const [houseBusy, setHouseBusy] = useState(false);
+  const [houseFile, setHouseFile] = useState(null);
+  const [houseMessage, setHouseMessage] = useState('');
 
   async function load() {
     try {
-      const r = await fetch('/api/shows', { cache: 'no-store' });
+      const r = await fetch('/api/shows', {
+        cache: 'no-store'
+      });
 
       if (r.status === 401) {
         setAuthed(false);
@@ -37,8 +43,18 @@ export default function Dashboard() {
       const result = await r.json();
       setAuthed(true);
       setShows(Array.isArray(result) ? result : []);
+
+      const h = await fetch('/api/house-ad', {
+        cache: 'no-store'
+      });
+
+      if (h.ok) {
+        setHouseAd(await h.json());
+      } else {
+        setHouseMessage('Could not load house ad settings.');
+      }
     } catch (error) {
-      alert(`Could not load shows: ${error.message}`);
+      alert(`Could not load dashboard: ${error.message}`);
     }
   }
 
@@ -56,13 +72,14 @@ export default function Dashboard() {
         body: JSON.stringify({ password })
       });
 
-      if (r.ok) {
-        setPassword('');
-        setAuthed(true);
-        await load();
-      } else {
+      if (!r.ok) {
         alert('Wrong password');
+        return;
       }
+
+      setPassword('');
+      setAuthed(true);
+      await load();
     } catch (error) {
       alert(`Login failed: ${error.message}`);
     }
@@ -82,7 +99,7 @@ export default function Dashboard() {
         end <= start
       ) {
         throw new Error(
-          'Enter valid show dates. The end must be after the start.'
+          'Enter valid dates. End must be after start.'
         );
       }
 
@@ -127,10 +144,11 @@ export default function Dashboard() {
           ? show
           : {
               ...show,
-              sponsor_slots: (show.sponsor_slots || []).map(slot =>
-                slot.id === slotId
-                  ? { ...slot, ...patch }
-                  : slot
+              sponsor_slots: (show.sponsor_slots || []).map(
+                slot =>
+                  slot.id === slotId
+                    ? { ...slot, ...patch }
+                    : slot
               )
             }
       )
@@ -155,12 +173,14 @@ export default function Dashboard() {
         exclusive_brand: show.exclusive_brand || '',
         exclusive_message: show.exclusive_message || '',
         exclusive_logo_url: show.exclusive_logo_url || null,
-        sponsor_slots: (show.sponsor_slots || []).map(slot => ({
-          id: slot.id,
-          brand: slot.brand || '',
-          active: !!slot.active,
-          paid: !!slot.paid
-        }))
+        sponsor_slots: (show.sponsor_slots || []).map(
+          slot => ({
+            id: slot.id,
+            brand: slot.brand || '',
+            active: !!slot.active,
+            paid: !!slot.paid
+          })
+        )
       };
 
       const r = await fetch(`/api/shows/${show.id}`, {
@@ -193,7 +213,9 @@ export default function Dashboard() {
       const result = await r.json().catch(() => ({}));
 
       if (!r.ok || !result.link) {
-        throw new Error(result.error || 'Could not generate link.');
+        throw new Error(
+          result.error || 'Could not generate link.'
+        );
       }
 
       setGeneratedLinks(current => ({
@@ -202,7 +224,8 @@ export default function Dashboard() {
       }));
 
       alert(
-        'Private link created. Copy and save it now. Generating another link invalidates this one.'
+        'Private link created. Copy and save it now. ' +
+        'Regenerating invalidates the previous link.'
       );
 
       await load();
@@ -220,8 +243,8 @@ export default function Dashboard() {
     try {
       await navigator.clipboard.writeText(link);
       alert('Sponsor link copied.');
-    } catch (error) {
-      window.prompt('Copy this sponsor link:', link);
+    } catch {
+      window.prompt('Copy sponsor link:', link);
     }
   }
 
@@ -257,10 +280,134 @@ export default function Dashboard() {
     }
   }
 
+  // SLOT 11 - ENABLE OR DISABLE
+
+  async function saveHouseEnabled(enabled) {
+    if (!houseAd || houseBusy) return;
+
+    setHouseBusy(true);
+    setHouseMessage('');
+
+    try {
+      const r = await fetch('/api/house-ad', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled })
+      });
+
+      const result = await r.json().catch(() => ({}));
+
+      if (!r.ok) {
+        throw new Error(
+          result.error || 'Could not update house ad.'
+        );
+      }
+
+      setHouseAd(result);
+      setHouseMessage(
+        enabled ? 'House ad enabled.' : 'House ad disabled.'
+      );
+    } catch (error) {
+      setHouseMessage(error.message);
+    } finally {
+      setHouseBusy(false);
+    }
+  }
+
+  // SLOT 11 - UPLOAD ARTWORK
+
+  async function uploadHouseArtwork() {
+    if (!houseFile || houseBusy) return;
+
+    setHouseBusy(true);
+    setHouseMessage('');
+
+    try {
+      const allowed = [
+        'image/png',
+        'image/jpeg',
+        'image/webp'
+      ];
+
+      if (
+        !allowed.includes(houseFile.type) ||
+        houseFile.size === 0 ||
+        houseFile.size > 5 * 1024 * 1024
+      ) {
+        throw new Error(
+          'Choose a PNG, JPG, or WEBP image up to 5 MB.'
+        );
+      }
+
+      const dimensions = await new Promise(
+        (resolve, reject) => {
+          const url = URL.createObjectURL(houseFile);
+          const img = new Image();
+
+          img.onload = () => {
+            const result = {
+              width: img.naturalWidth,
+              height: img.naturalHeight
+            };
+            URL.revokeObjectURL(url);
+            resolve(result);
+          };
+
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error('Could not read image.'));
+          };
+
+          img.src = url;
+        }
+      );
+
+      if (
+        dimensions.width !== 1020 ||
+        dimensions.height !== 200
+      ) {
+        throw new Error(
+          `Image is ${dimensions.width} x ` +
+          `${dimensions.height}. Required: 1020 x 200.`
+        );
+      }
+
+      const data = new FormData();
+      data.append('file', houseFile);
+
+      const r = await fetch('/api/house-ad/upload', {
+        method: 'POST',
+        body: data
+      });
+
+      const result = await r.json().catch(() => ({}));
+
+      if (!r.ok || !result.house_ad) {
+        throw new Error(
+          result.error || 'Upload failed.'
+        );
+      }
+
+      setHouseAd(result.house_ad);
+      setHouseFile(null);
+      setHouseMessage('House advertisement uploaded successfully.');
+
+      const input = document.getElementById(
+        'house-ad-file'
+      );
+
+      if (input) input.value = '';
+    } catch (error) {
+      setHouseMessage(error.message);
+    } finally {
+      setHouseBusy(false);
+    }
+  }
+
   if (authed === null) {
     return (
       <main className="center">
-        <div className="card">Loading…</div>
+        <div className="card">Loading...</div>
       </main>
     );
   }
@@ -288,21 +435,129 @@ export default function Dashboard() {
         <div>
           <h1>Sponsor Dashboard</h1>
           <p>
-            Schedule shows, manage 10 rotating artwork
-            slots, and approve sponsor submissions.
+            Manage 10 sponsor slots and your permanent
+            Discount Kicks house advertisement.
           </p>
         </div>
 
         <button
           className="ghost"
           onClick={async () => {
-            await fetch('/api/logout', { method: 'POST' });
+            await fetch('/api/logout', {
+              method: 'POST'
+            });
             location.reload();
           }}
         >
           Log out
         </button>
       </header>
+
+      {/* SLOT 11 HOUSE AD PANEL */}
+
+      <section className="card">
+        <h2>Slot 11 - Discount Kicks House Ad</h2>
+
+        <p>
+          Permanent advertisement for all Discount Kicks
+          shows. Displays only when fewer than 10 eligible
+          paid sponsor banners are available and exclusive
+          takeover is off.
+        </p>
+
+        {houseAd ? (
+          <div>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                marginBottom: 20
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={!!houseAd.enabled}
+                disabled={houseBusy}
+                onChange={e =>
+                  saveHouseEnabled(e.target.checked)
+                }
+              />
+              House advertisement enabled
+            </label>
+
+            {houseAd.artwork_url ? (
+              <div style={{ marginBottom: 20 }}>
+                <strong>Current house advertisement</strong>
+
+                <div style={{ marginTop: 10 }}>
+                  <a
+                    href={houseAd.artwork_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={houseAd.artwork_url}
+                      alt="Discount Kicks house advertisement"
+                      style={{
+                        width: '100%',
+                        maxWidth: 1020,
+                        height: 'auto',
+                        borderRadius: 8
+                      }}
+                    />
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <p>No house advertisement uploaded yet.</p>
+            )}
+
+            <div style={{ marginBottom: 15 }}>
+              <label>
+                Upload new 1020 x 200 banner
+                <input
+                  id="house-ad-file"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  disabled={houseBusy}
+                  onChange={e =>
+                    setHouseFile(
+                      e.target.files?.[0] || null
+                    )
+                  }
+                />
+              </label>
+            </div>
+
+            <button
+              type="button"
+              disabled={!houseFile || houseBusy}
+              onClick={uploadHouseArtwork}
+            >
+              {houseBusy
+                ? 'Working...'
+                : 'Upload / Replace House Ad'}
+            </button>
+          </div>
+        ) : (
+          <p>Loading house advertisement settings...</p>
+        )}
+
+        {houseMessage && (
+          <p
+            role="status"
+            style={{
+              marginTop: 15,
+              fontWeight: 'bold'
+            }}
+          >
+            {houseMessage}
+          </p>
+        )}
+      </section>
+
+      {/* CREATE SHOW */}
 
       <section className="card">
         <h2>Create upcoming show</h2>
@@ -313,7 +568,10 @@ export default function Dashboard() {
             <input
               value={form.title}
               onChange={e =>
-                setForm({ ...form, title: e.target.value })
+                setForm({
+                  ...form,
+                  title: e.target.value
+                })
               }
             />
           </label>
@@ -325,7 +583,10 @@ export default function Dashboard() {
               required
               value={form.starts_at}
               onChange={e =>
-                setForm({ ...form, starts_at: e.target.value })
+                setForm({
+                  ...form,
+                  starts_at: e.target.value
+                })
               }
             />
           </label>
@@ -337,7 +598,10 @@ export default function Dashboard() {
               required
               value={form.ends_at}
               onChange={e =>
-                setForm({ ...form, ends_at: e.target.value })
+                setForm({
+                  ...form,
+                  ends_at: e.target.value
+                })
               }
             />
           </label>
@@ -393,6 +657,8 @@ export default function Dashboard() {
         </form>
       </section>
 
+      {/* EXISTING SHOWS */}
+
       {shows.map(show => {
         const slots = show.sponsor_slots || [];
 
@@ -407,7 +673,10 @@ export default function Dashboard() {
             ).length * Number(show.slot_price || 0);
 
         return (
-          <section className="card show" key={show.id}>
+          <section
+            className="card show"
+            key={show.id}
+          >
             <div className="showTop">
               <div>
                 <h2>{show.title}</h2>
@@ -435,7 +704,8 @@ export default function Dashboard() {
                   value={show.rotation_seconds}
                   onChange={e =>
                     patchShow(show.id, {
-                      rotation_seconds: Number(e.target.value)
+                      rotation_seconds:
+                        Number(e.target.value)
                     })
                   }
                 />
@@ -483,13 +753,17 @@ export default function Dashboard() {
 
             <p style={{ fontSize: 13, opacity: 0.75 }}>
               Sponsor artwork is submitted through private
-              links and requires your approval. Company
-              names are for your records.
+              links and requires approval. Company names
+              are for your records.
             </p>
 
             <div className="slots">
               {[...slots]
-                .sort((a, b) => a.position - b.position)
+                .sort(
+                  (a, b) =>
+                    Number(a.position) -
+                    Number(b.position)
+                )
                 .map(slot => {
                   const working = !!slotBusy;
 
@@ -565,7 +839,7 @@ export default function Dashboard() {
                           }
                         >
                           {slotBusy === slot.id
-                            ? 'Working…'
+                            ? 'Working...'
                             : generatedLinks[slot.id]
                               ? 'Regenerate Link'
                               : 'Generate Sponsor Link'}
@@ -602,10 +876,9 @@ export default function Dashboard() {
                                 opacity: 0.75
                               }}
                             >
-                              A link was previously
-                              generated. Generate a
-                              replacement if you no
-                              longer have it.
+                              A link was previously generated.
+                              Generate a replacement if you
+                              no longer have it.
                             </p>
                           )}
                       </div>
@@ -618,14 +891,11 @@ export default function Dashboard() {
                       >
                         {slot.artwork_url && (
                           <div style={{ marginBottom: 8 }}>
-                            <div
-                              style={{
-                                fontSize: 12,
-                                fontWeight: 'bold'
-                              }}
+                            <strong
+                              style={{ fontSize: 12 }}
                             >
                               Approved artwork
-                            </div>
+                            </strong>
 
                             <a
                               href={slot.artwork_url}
@@ -648,14 +918,11 @@ export default function Dashboard() {
 
                         {pending && (
                           <div>
-                            <div
-                              style={{
-                                fontSize: 12,
-                                fontWeight: 'bold'
-                              }}
+                            <strong
+                              style={{ fontSize: 12 }}
                             >
-                              New submission — review
-                            </div>
+                              New submission - review
+                            </strong>
 
                             <a
                               href={slot.pending_artwork_url}
