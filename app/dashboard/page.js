@@ -364,7 +364,7 @@ export default function Dashboard() {
 
       if (
         dimensions.width !== 1020 ||
-        dimensions.height !== 200
+        dimensions.height !== 260
       ) {
         throw new Error(
           `Image is ${dimensions.width} x ` +
