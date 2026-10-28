@@ -368,7 +368,7 @@ export default function Dashboard() {
       ) {
         throw new Error(
           `Image is ${dimensions.width} x ` +
-          `${dimensions.height}. Required: 1020 x 200.`
+          `${dimensions.height}. Required: 1020 x 260.`
         );
       }
 
@@ -515,7 +515,7 @@ export default function Dashboard() {
 
             <div style={{ marginBottom: 15 }}>
               <label>
-                Upload new 1020 x 200 banner
+                Upload new 1020 x 260 banner
                 <input
                   id="house-ad-file"
                   type="file"
