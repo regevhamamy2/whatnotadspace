@@ -143,7 +143,7 @@ export default function Overlay() {
           top: 200,
           left: 30,
           width: 1020,
-          height: 200,
+          height: 260,
           overflow: 'hidden',
           boxSizing: 'border-box',
           background: '#ffffff',
