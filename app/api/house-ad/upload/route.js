@@ -9,7 +9,7 @@ export const runtime = 'nodejs';
 const CHANNEL = 'discount-kicks';
 const MAX_SIZE = 5 * 1024 * 1024;
 const WIDTH = 1020;
-const HEIGHT = 200;
+const HEIGHT = 260;
 
 const TYPES = {
   'image/png': 'png',
