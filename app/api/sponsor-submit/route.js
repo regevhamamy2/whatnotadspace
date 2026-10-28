@@ -7,7 +7,7 @@ export const runtime = 'nodejs';
 
 const MAX_SIZE = 5 * 1024 * 1024;
 const REQUIRED_WIDTH = 1020;
-const REQUIRED_HEIGHT = 200;
+const REQUIRED_HEIGHT = 260;
 
 const TYPES = {
   'image/png': {
