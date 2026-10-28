@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 
 const BANNER_WIDTH = 1020;
-const BANNER_HEIGHT = 200;
+const BANNER_HEIGHT = 260;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export default function SponsorUploadPage() {
@@ -262,7 +262,7 @@ export default function SponsorUploadPage() {
               }}
             >
               {[
-                '1020 × 200 pixels',
+                '1020 × 260 pixels',
                 'PNG / JPG / WEBP',
                 'Maximum 5 MB'
               ].map(item => (
@@ -296,7 +296,7 @@ export default function SponsorUploadPage() {
             <div
               style={{
                 width: '100%',
-                aspectRatio: '1020 / 200',
+                aspectRatio: '1020 / 260',
                 position: 'relative',
                 overflow: 'hidden',
                 boxSizing: 'border-box',
@@ -421,7 +421,7 @@ export default function SponsorUploadPage() {
                   Include a short promotional message.
                 </li>
                 <li>
-                  Fill the entire 1020 × 200 canvas
+                  Fill the entire 1020 × 260 canvas
                   without empty margins.
                 </li>
                 <li>
@@ -467,7 +467,7 @@ export default function SponsorUploadPage() {
               <div
                 style={{
                   width: '100%',
-                  aspectRatio: '1020 / 200',
+                  aspectRatio: '1020 / 260',
                   border: '1px solid #d1d9e5',
                   borderRadius: 8,
                   overflow: 'hidden',
